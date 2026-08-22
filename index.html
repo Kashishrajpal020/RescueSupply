@@ -1,0 +1,1015 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RescueSupply — Rescue Surplus Food, Feed Communities</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap");
+ 
+:root {
+  --forest: #10251b;
+  --emerald: #1f8a5b;
+  --emerald-dark: #176b46;
+  --cream: #f7f5ef;
+  --cream-soft: #fbfaf6;
+  --mint: #ddf3e3;
+  --orange: #ff9f43;
+  --text-dark: #17221c;
+  --text-muted: #68756d;
+  --border: #e6e2d6;
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 1px 2px rgba(23,34,28,.05), 0 2px 6px rgba(23,34,28,.06);
+  --shadow-md: 0 6px 20px rgba(23,34,28,.08);
+  --shadow-lg: 0 16px 40px rgba(23,34,28,.12);
+  --ease: cubic-bezier(.4,0,.2,1);
+  --fast: 180ms var(--ease);
+  --normal: 260ms var(--ease);
+  --font-display: "Manrope","Inter",sans-serif;
+  --font-body: "Inter",sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background:var(--cream); color:var(--text-dark); font-family:var(--font-body); -webkit-font-smoothing:antialiased; line-height:1.5; }
+h1,h2,h3,h4 { font-family:var(--font-display); color:var(--forest); margin:0; letter-spacing:-.02em; }
+p { margin:0; }
+a { color:inherit; text-decoration:none; cursor:pointer; }
+button { font-family:inherit; cursor:pointer; }
+::selection { background:var(--mint); color:var(--forest); }
+:focus-visible { outline:2px solid var(--emerald); outline-offset:2px; }
+.container { width:100%; max-width:1180px; margin:0 auto; padding:0 24px; }
+.section { padding:96px 0; }
+.section-tight { padding:64px 0; }
+.eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--emerald-dark); background:var(--mint); padding:6px 14px; border-radius:999px; }
+.section-heading { font-size:clamp(28px,4vw,40px); font-weight:800; line-height:1.15; }
+.section-sub { color:var(--text-muted); font-size:17px; max-width:560px; margin-top:12px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; font-size:15px; padding:13px 24px; border-radius:12px; border:1px solid transparent; transition:transform var(--fast),box-shadow var(--fast),background var(--fast),color var(--fast),border-color var(--fast); white-space:nowrap; }
+.btn:active { transform:translateY(1px) scale(.99); }
+.btn-primary { background:var(--emerald); color:#fff; box-shadow:0 6px 16px rgba(31,138,91,.28); }
+.btn-primary:hover { background:var(--emerald-dark); box-shadow:0 8px 22px rgba(31,138,91,.34); }
+.btn-secondary { background:var(--forest); color:#fff; }
+.btn-outline { background:transparent; color:var(--forest); border-color:var(--border); }
+.btn-outline:hover { border-color:var(--forest); background:rgba(16,37,27,.03); }
+.btn-sm { padding:9px 16px; font-size:14px; border-radius:10px; }
+.btn-block { width:100%; }
+.btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-sm); transition:transform var(--normal),box-shadow var(--normal),border-color var(--normal); }
+.card-hover:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:rgba(31,138,91,.25); }
+.badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 11px; border-radius:999px; white-space:nowrap; }
+.badge-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.badge-available { background:#e5f6ec; color:#147a4d; } .badge-available .badge-dot { background:#1f8a5b; }
+.badge-pending { background:#fff2e0; color:#a15c00; } .badge-pending .badge-dot { background:var(--orange); }
+.badge-picked { background:#e7f0fb; color:#1e5fa8; } .badge-picked .badge-dot { background:#2f7fd6; }
+.badge-rescued { background:#fdeaea; color:#b8395a; } .badge-rescued .badge-dot { background:#e0577c; }
+.navbar { position:sticky; top:0; z-index:50; background:rgba(247,245,239,.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid transparent; transition:border-color var(--normal),box-shadow var(--normal),background var(--normal); }
+.navbar.scrolled { border-bottom-color:var(--border); box-shadow:0 2px 12px rgba(23,34,28,.04); background:rgba(247,245,239,.92); }
+.nav-inner { display:flex; align-items:center; justify-content:space-between; height:72px; }
+.nav-logo { display:flex; align-items:center; gap:9px; font-family:var(--font-display); font-weight:800; font-size:19px; color:var(--forest); }
+.nav-links { display:flex; align-items:center; gap:32px; }
+.nav-link { font-size:14.5px; font-weight:500; color:var(--text-muted); position:relative; padding:4px 0; transition:color var(--fast); background:none; border:none; }
+.nav-link:hover, .nav-link.active { color:var(--forest); }
+.nav-link.active::after { content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--emerald); border-radius:2px; }
+.nav-actions { display:flex; align-items:center; gap:12px; }
+.hamburger { display:none; background:none; border:none; padding:6px; font-size:18px; }
+.mobile-menu { display:flex; flex-direction:column; gap:4px; padding:12px 24px 20px; border-top:1px solid var(--border); background:var(--cream-soft); }
+.mobile-menu a { padding:12px 4px; font-weight:500; border-bottom:1px solid var(--border); }
+@media (max-width:860px){ .nav-links{display:none;} .hamburger{display:inline-flex;} .nav-actions .btn{display:none;} }
+.hero { padding:72px 0 40px; overflow:hidden; }
+.hero-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; }
+.hero-title { font-size:clamp(36px,5.2vw,58px); font-weight:800; line-height:1.08; }
+.hero-title .accent { color:var(--emerald); }
+.hero-sub { margin-top:20px; font-size:18px; color:var(--text-muted); max-width:480px; }
+.hero-actions { display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+.hero-visual { position:relative; border-radius:var(--radius-lg); background:linear-gradient(155deg,var(--forest) 0%,#1c3b2a 100%); min-height:420px; overflow:hidden; box-shadow:var(--shadow-lg); }
+.route-svg { width:100%; height:100%; }
+.floating-card { position:absolute; background:#fff; border-radius:var(--radius-sm); padding:14px 16px; box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:12px; animation:float 5s ease-in-out infinite; }
+.floating-card .fc-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; background:var(--mint); }
+.floating-card .fc-title { font-weight:700; font-size:14px; color:var(--forest); }
+.floating-card .fc-sub { font-size:12px; color:var(--text-muted); }
+.floating-card.fc-top { top:32px; left:-18px; }
+.floating-card.fc-bottom { bottom:28px; right:-14px; animation-delay:1.4s; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+@media (max-width:940px){ .hero-grid{grid-template-columns:1fr;} .hero-visual{min-height:320px;} .floating-card.fc-top{left:12px;} .floating-card.fc-bottom{right:12px;} }
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+.stat-cell { background:#fff; padding:32px 24px; text-align:left; }
+.stat-number { font-family:var(--font-display); font-size:clamp(26px,3vw,34px); font-weight:800; color:var(--forest); }
+.stat-label { margin-top:6px; color:var(--text-muted); font-size:14px; }
+.demo-note { text-align:center; font-size:12.5px; color:var(--text-muted); margin-top:14px; }
+@media (max-width:760px){ .stat-grid{grid-template-columns:repeat(2,1fr);} }
+.steps-rail { position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:48px; }
+.steps-rail::before { content:""; position:absolute; top:27px; left:8%; right:8%; height:2px; background:repeating-linear-gradient(to right,var(--border) 0 8px,transparent 8px 14px); z-index:0; }
+.step-item { position:relative; z-index:1; text-align:left; }
+.step-num { width:54px; height:54px; border-radius:50%; background:#fff; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+.step-title { font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--forest); margin-bottom:6px; }
+.step-text { font-size:14px; color:var(--text-muted); }
+@media (max-width:760px){ .steps-rail{grid-template-columns:1fr;} .steps-rail::before{display:none;} }
+.donation-card { padding:20px; display:flex; flex-direction:column; gap:12px; }
+.donation-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.donation-restaurant { font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--forest); }
+.donation-food { font-size:20px; font-weight:700; margin-top:2px; }
+.donation-meta { display:flex; flex-wrap:wrap; gap:14px; font-size:13.5px; color:var(--text-muted); }
+.donation-meta span { display:inline-flex; align-items:center; gap:5px; }
+.card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+@media (max-width:940px){ .card-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:640px){ .card-grid{grid-template-columns:1fr;} }
+.filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin:32px 0 28px; }
+.filter-chip { padding:9px 16px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:13.5px; font-weight:600; color:var(--text-muted); transition:all var(--fast); }
+.filter-chip.active { background:var(--forest); border-color:var(--forest); color:#fff; }
+.filter-select { padding:9px 14px; border-radius:10px; border:1px solid var(--border); background:#fff; font-size:13.5px; font-weight:600; color:var(--text-dark); }
+.map-frame { position:relative; width:100%; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow-md); background:#eef4ee; }
+.fallback-map { position:relative; width:100%; height:100%; min-height:460px; background:#eaf2ea; }
+.fallback-map svg { position:absolute; inset:0; width:100%; height:100%; }
+.map-marker { position:absolute; transform:translate(-50%,-100%); cursor:pointer; }
+.marker-pin { width:34px; height:34px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md); border:2px solid #fff; transition:transform var(--fast); }
+.map-marker:hover .marker-pin { transform:rotate(-45deg) scale(1.12); }
+.marker-pin span { transform:rotate(45deg); font-size:14px; }
+.marker-available { background:var(--emerald); } .marker-pending { background:var(--orange); } .marker-picked { background:#2f7fd6; } .marker-rescued { background:#e0577c; }
+.map-popup { position:absolute; transform:translate(-50%,calc(-100% - 42px)); width:230px; background:#fff; border-radius:var(--radius-sm); box-shadow:var(--shadow-lg); padding:16px; z-index:10; animation:pop-in 160ms var(--ease); }
+@keyframes pop-in { from{opacity:0; transform:translate(-50%,calc(-100% - 32px));} to{opacity:1; transform:translate(-50%,calc(-100% - 42px));} }
+.map-popup-title { font-family:var(--font-display); font-weight:700; color:var(--forest); font-size:14.5px; }
+.map-popup-food { font-size:13.5px; margin-top:4px; color:var(--text-dark); }
+.map-popup-meta { margin-top:8px; font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px; }
+.map-legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:18px; font-size:13px; color:var(--text-muted); padding:0 20px 18px; }
+.map-legend span { display:inline-flex; align-items:center; gap:7px; }
+.legend-dot { width:9px; height:9px; border-radius:50%; }
+.map-config-note { margin:0 20px 18px; font-size:12.5px; color:var(--text-muted); background:var(--mint); border-radius:10px; padding:10px 14px; }
+.form-card { padding:36px; max-width:620px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px; }
+.form-grid .full { grid-column:1/-1; }
+.field label { display:block; font-size:13.5px; font-weight:600; color:var(--forest); margin-bottom:7px; }
+.field input, .field select, .field textarea { width:100%; padding:11px 14px; border-radius:10px; border:1px solid var(--border); background:var(--cream-soft); font-size:14.5px; font-family:inherit; color:var(--text-dark); transition:border-color var(--fast),background var(--fast); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color:var(--emerald); background:#fff; }
+.field textarea { resize:vertical; min-height:84px; }
+@media (max-width:620px){ .form-grid{grid-template-columns:1fr;} }
+.success-banner { display:flex; align-items:center; gap:10px; background:var(--mint); color:var(--emerald-dark); border-radius:12px; padding:14px 18px; font-weight:600; font-size:14.5px; margin-top:20px; animation:pop-in 200ms var(--ease); }
+.timeline { display:flex; flex-direction:column; }
+.timeline-step { display:flex; gap:16px; }
+.timeline-marker { display:flex; flex-direction:column; align-items:center; }
+.timeline-dot { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; background:var(--border); flex-shrink:0; }
+.timeline-dot.done { background:var(--emerald); } .timeline-dot.current { background:var(--orange); }
+.timeline-line { width:2px; flex:1; background:var(--border); min-height:34px; }
+.timeline-line.done { background:var(--emerald); }
+.timeline-content { padding-bottom:28px; }
+.timeline-title { font-weight:700; font-size:14.5px; color:var(--forest); }
+.timeline-sub { font-size:13px; color:var(--text-muted); margin-top:2px; }
+.dash-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.dash-card { padding:24px; }
+.dash-icon { width:42px; height:42px; border-radius:12px; background:var(--mint); display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:16px; }
+@media (max-width:940px){ .dash-grid{grid-template-columns:repeat(2,1fr);} }
+.chart-card { padding:28px; margin-top:24px; }
+.role-toggle { display:inline-flex; background:#fff; border:1px solid var(--border); border-radius:12px; padding:4px; gap:4px; }
+.role-toggle button { padding:9px 18px; border-radius:8px; border:none; background:transparent; font-weight:600; font-size:13.5px; color:var(--text-muted); transition:all var(--fast); }
+.role-toggle button.active { background:var(--forest); color:#fff; }
+.profile-header { display:flex; align-items:center; gap:18px; margin-top:28px; }
+.profile-avatar { width:64px; height:64px; border-radius:18px; background:var(--mint); display:flex; align-items:center; justify-content:center; font-size:26px; }
+.leaderboard { display:flex; flex-direction:column; gap:12px; }
+.leaderboard-row { display:flex; align-items:center; gap:16px; padding:16px 20px; }
+.rank-medal { font-size:20px; width:30px; text-align:center; }
+.leaderboard-name { font-weight:700; color:var(--forest); font-size:14.5px; flex:1; }
+.leaderboard-meals { font-weight:700; color:var(--emerald-dark); font-size:14.5px; }
+.footer { background:var(--forest); color:#cfe0d5; padding:64px 0 28px; margin-top:40px; }
+.footer-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; }
+.footer-logo { display:flex; align-items:center; gap:8px; font-family:var(--font-display); font-weight:800; font-size:18px; color:#fff; }
+.footer-tag { margin-top:12px; font-size:14px; color:#9db6a6; max-width:260px; }
+.footer-col-title { font-weight:700; color:#fff; font-size:13.5px; margin-bottom:14px; }
+.footer-col a { display:block; font-size:13.5px; color:#9db6a6; padding:6px 0; transition:color var(--fast); }
+.footer-col a:hover { color:#fff; }
+.footer-bottom { margin-top:48px; padding-top:24px; border-top:1px solid rgba(255,255,255,.1); font-size:13px; color:#7f9989; }
+@media (max-width:760px){ .footer-grid{grid-template-columns:1fr; gap:32px;} }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+@media (max-width:860px){ .two-col{grid-template-columns:1fr;} }
+.empty-state { text-align:center; padding:60px 20px; color:var(--text-muted); }
+.fade-up { animation:fadeUp 500ms var(--ease) both; }
+@keyframes fadeUp { from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+.page-header { padding:56px 0 8px; }
+.back-link { color:var(--text-muted); font-size:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:14px; height:220px; padding-top:10px; }
+.chart-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; height:100%; justify-content:flex-end; }
+.chart-bar { width:100%; max-width:38px; background:linear-gradient(180deg,#2fa870,var(--emerald)); border-radius:8px 8px 3px 3px; transition:height 700ms var(--ease); }
+.chart-day { font-size:12px; color:var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, createContext, useContext } = React;
+ 
+/* ============================================================
+   DATA  (src/data/donations.js)
+============================================================ */
+const STATUS = {
+  AVAILABLE: "Available",
+  PENDING: "Pickup Pending",
+  PICKED_UP: "Picked Up",
+  RESCUED: "Rescued",
+};
+const STATUS_FLOW = [STATUS.AVAILABLE, STATUS.PENDING, STATUS.PICKED_UP, STATUS.RESCUED];
+const FOOD_CATEGORIES = ["All", "Meals", "Bakery", "Fruits", "Vegetables", "Packaged Food"];
+ 
+const initialDonations = [
+  { id: 1, restaurant: "Green Leaf Restaurant", category: "Meals", food: "Rice + Dal",
+    description: "Freshly cooked steamed rice with mixed lentil dal, prepared in surplus for a cancelled catering order.",
+    meals: 40, condition: "Freshly cooked, still hot", contact: "+91 98765 43210",
+    address: "SCO 14, Sector 22, near City Bus Stand", availableUntil: "9:00 PM",
+    latitude: 30.352, longitude: 76.824, status: STATUS.AVAILABLE, distanceKm: 1.4 },
+  { id: 2, restaurant: "Spice Hub", category: "Meals", food: "Roti + Sabzi",
+    description: "Mixed vegetable curry with whole wheat rotis, made in excess for an evening event.",
+    meals: 25, condition: "Freshly cooked, packed and sealed", contact: "+91 98765 11223",
+    address: "Model Town Market, Shop 8", availableUntil: "8:30 PM",
+    latitude: 30.36, longitude: 76.808, status: STATUS.AVAILABLE, distanceKm: 2.1 },
+  { id: 3, restaurant: "Urban Bites", category: "Packaged Food", food: "Sandwiches",
+    description: "Assorted vegetable and paneer sandwiches, individually wrapped and refrigerated.",
+    meals: 30, condition: "Refrigerated, best before tonight", contact: "+91 98765 55667",
+    address: "Phase 3B2, Industrial Area", availableUntil: "10:00 PM",
+    latitude: 30.34, longitude: 76.79, status: STATUS.PENDING, distanceKm: 3.6 },
+  { id: 4, restaurant: "Food Corner", category: "Meals", food: "Biryani",
+    description: "Vegetable biryani cooked for a wedding function with a large surplus batch remaining.",
+    meals: 50, condition: "Freshly cooked, still hot", contact: "+91 98765 99887",
+    address: "Sector 17 Plaza, Gate 2", availableUntil: "9:30 PM",
+    latitude: 30.365, longitude: 76.836, status: STATUS.AVAILABLE, distanceKm: 0.9 },
+  { id: 5, restaurant: "Cafe Aroma", category: "Bakery", food: "Bread + Snacks",
+    description: "End-of-day bakery surplus: bread loaves, muffins and savoury pastries.",
+    meals: 20, condition: "Room temperature, packed today", contact: "+91 98765 33445",
+    address: "Elante Road, Cafe Row", availableUntil: "7:00 PM",
+    latitude: 30.33, longitude: 76.815, status: STATUS.RESCUED, distanceKm: 4.2 },
+];
+ 
+const leaderboardData = [
+  { name: "Green Leaf Restaurant", meals: 480 },
+  { name: "Spice Hub", meals: 420 },
+  { name: "Food Corner", meals: 380 },
+];
+ 
+const weeklyMeals = [
+  { day: "Mon", meals: 180 }, { day: "Tue", meals: 220 }, { day: "Wed", meals: 160 },
+  { day: "Thu", meals: 260 }, { day: "Fri", meals: 310 }, { day: "Sat", meals: 340 }, { day: "Sun", meals: 240 },
+];
+ 
+const impactStats = { mealsRescued: 12480, restaurants: 86, ngos: 32, foodSavedTons: 4.8 };
+ 
+/* ============================================================
+   SHARED STATE  (src/context/DonationsContext.jsx)
+============================================================ */
+const DonationsContext = createContext(null);
+ 
+function DonationsProvider({ children }) {
+  const [donations, setDonations] = useState(initialDonations);
+  const [role, setRole] = useState("Restaurant");
+  const [rescuedTotal, setRescuedTotal] = useState(248);
+ 
+  function addDonation(newDonation) {
+    setDonations(prev => {
+      const nextId = prev.length ? Math.max(...prev.map(d => d.id)) + 1 : 1;
+      return [...prev, { id: nextId, status: STATUS.AVAILABLE, distanceKm: (Math.random()*3+0.5).toFixed(1), ...newDonation }];
+    });
+  }
+ 
+  function advanceStatus(id) {
+    setDonations(prev => prev.map(d => {
+      if (d.id !== id) return d;
+      const idx = STATUS_FLOW.indexOf(d.status);
+      const next = STATUS_FLOW[Math.min(idx+1, STATUS_FLOW.length-1)];
+      if (next === STATUS.RESCUED && d.status !== STATUS.RESCUED) {
+        setRescuedTotal(t => t + Number(d.meals||0));
+      }
+      return { ...d, status: next };
+    }));
+  }
+ 
+  function acceptDonation(id) {
+    setDonations(prev => prev.map(d => d.id === id && d.status === STATUS.AVAILABLE ? { ...d, status: STATUS.PENDING } : d));
+  }
+ 
+  const myRescues = useMemo(() => donations.filter(d => d.status !== STATUS.AVAILABLE), [donations]);
+ 
+  return (
+    <DonationsContext.Provider value={{ donations, myRescues, role, setRole, rescuedTotal, addDonation, advanceStatus, acceptDonation }}>
+      {children}
+    </DonationsContext.Provider>
+  );
+}
+function useDonations() { return useContext(DonationsContext); }
+ 
+/* ============================================================
+   NAVIGATION  (lightweight router replacement for the single-file build)
+============================================================ */
+const RouteContext = createContext(null);
+function useRoute() { return useContext(RouteContext); }
+ 
+function NavLink({ to, className = "", children, ...rest }) {
+  const { route, go } = useRoute();
+  const isActive = route.page === to;
+  return (
+    <a href="#" className={`${className} ${isActive ? "active" : ""}`}
+       onClick={(e) => { e.preventDefault(); go(to); }} {...rest}>
+      {children}
+    </a>
+  );
+}
+ 
+/* ============================================================
+   REUSABLE COMPONENTS  (src/components/*)
+============================================================ */
+function Button({ children, variant="primary", size="md", block=false, as:Comp="button", className="", ...rest }) {
+  const classes = ["btn", `btn-${variant}`, size==="sm"?"btn-sm":"", block?"btn-block":"", className].filter(Boolean).join(" ");
+  return <Comp className={classes} {...rest}>{children}</Comp>;
+}
+ 
+const STATUS_BADGE_CONFIG = {
+  [STATUS.AVAILABLE]: { label: "Available", cls: "badge-available" },
+  [STATUS.PENDING]: { label: "Pickup Pending", cls: "badge-pending" },
+  [STATUS.PICKED_UP]: { label: "Picked Up", cls: "badge-picked" },
+  [STATUS.RESCUED]: { label: "Rescued", cls: "badge-rescued" },
+};
+function StatusBadge({ status }) {
+  const c = STATUS_BADGE_CONFIG[status] || STATUS_BADGE_CONFIG[STATUS.AVAILABLE];
+  return <span className={`badge ${c.cls}`}><span className="badge-dot" />{c.label}</span>;
+}
+ 
+function DonationCard({ donation, onAccept, onView }) {
+  const { id, restaurant, food, meals, distanceKm, availableUntil, status } = donation;
+  return (
+    <div className="card card-hover donation-card">
+      <div className="donation-top">
+        <div>
+          <div className="donation-restaurant">🍛 {restaurant}</div>
+          <div className="donation-food">{food}</div>
+        </div>
+        <StatusBadge status={status} />
+      </div>
+      <div className="donation-meta">
+        <span>🍱 {meals} meals</span>
+        <span>📍 {distanceKm} km away</span>
+        <span>⏰ Until {availableUntil}</span>
+      </div>
+      <div style={{ display:"flex", gap:10, marginTop:6 }}>
+        <Button variant="outline" size="sm" onClick={() => onView(id)}>View Details</Button>
+        {status === STATUS.AVAILABLE && onAccept && (
+          <Button size="sm" onClick={() => onAccept(id)}>Accept Pickup</Button>
+        )}
+      </div>
+    </div>
+  );
+}
+ 
+const MEDALS = ["🥇","🥈","🥉"];
+function RestaurantCard({ name, meals, rank }) {
+  return (
+    <div className="card leaderboard-row">
+      <span className="rank-medal">{MEDALS[rank] || `#${rank+1}`}</span>
+      <span className="leaderboard-name">{name}</span>
+      <span className="leaderboard-meals">{meals.toLocaleString()} meals</span>
+    </div>
+  );
+}
+ 
+function ImpactCard({ icon, value, suffix="", label }) {
+  const [display, setDisplay] = useState(0);
+  const isDecimal = value % 1 !== 0;
+  useEffect(() => {
+    let frame; const duration = 900; const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now-start)/duration, 1);
+      const eased = 1 - Math.pow(1-progress, 3);
+      const current = value * eased;
+      setDisplay(isDecimal ? Number(current.toFixed(1)) : Math.floor(current));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    }
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [value, isDecimal]);
+  return (
+    <div className="stat-cell fade-up">
+      <div className="stat-number">{icon ? `${icon} ` : ""}{display.toLocaleString()}{suffix}</div>
+      <div className="stat-label">{label}</div>
+    </div>
+  );
+}
+ 
+const STATUS_META = {
+  [STATUS.AVAILABLE]: { emoji:"🟢", markerClass:"marker-available", hex:"#1F8A5B", label:"Available" },
+  [STATUS.PENDING]: { emoji:"🟡", markerClass:"marker-pending", hex:"#FF9F43", label:"Pickup Pending" },
+  [STATUS.PICKED_UP]: { emoji:"🔵", markerClass:"marker-picked", hex:"#2F7FD6", label:"Picked Up" },
+  [STATUS.RESCUED]: { emoji:"❤️", markerClass:"marker-rescued", hex:"#E0577C", label:"Rescued" },
+};
+ 
+function RoadBackground() {
+  return (
+    <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+      <rect width="400" height="300" fill="#eaf2ea" />
+      {[40,110,180,250,320].map(x => <line key={`v${x}`} x1={x} y1="0" x2={x} y2="300" stroke="#d7e6da" strokeWidth="6" />)}
+      {[40,100,160,220,280].map(y => <line key={`h${y}`} x1="0" y1={y} x2="400" y2={y} stroke="#d7e6da" strokeWidth="6" />)}
+      <circle cx="200" cy="150" r="120" fill="#e2eee3" opacity="0.6" />
+    </svg>
+  );
+}
+ 
+function MapPopupContent({ donation, onView }) {
+  const meta = STATUS_META[donation.status];
+  return (
+    <div>
+      <div className="map-popup-title">{donation.restaurant}</div>
+      <div className="map-popup-food">🍛 {donation.food} · {donation.meals} meals</div>
+      <div className="map-popup-meta">
+        <span>📍 {donation.distanceKm} km away</span>
+        <span>⏰ Available until {donation.availableUntil}</span>
+        <span>{meta.emoji} {meta.label}</span>
+      </div>
+      <button className="btn btn-primary btn-sm" style={{ marginTop:10, width:"100%" }} onClick={() => onView(donation.id)}>
+        View Donation
+      </button>
+    </div>
+  );
+}
+ 
+// Custom fallback map — no Google Maps API key needed. See comment in MapView
+// for exactly where a real Google Map (@react-google-maps/api) would slot in.
+function MapView({ donations, height=460, onView }) {
+  const [activeId, setActiveId] = useState(null);
+  const bounds = useMemo(() => {
+    const lats = donations.map(d => d.latitude), lngs = donations.map(d => d.longitude);
+    return { minLat: Math.min(...lats), maxLat: Math.max(...lats), minLng: Math.min(...lngs), maxLng: Math.max(...lngs) };
+  }, [donations]);
+ 
+  function toPosition(d) {
+    const latRange = bounds.maxLat - bounds.minLat || 1;
+    const lngRange = bounds.maxLng - bounds.minLng || 1;
+    const top = 12 + (1 - (d.latitude - bounds.minLat)/latRange) * 76;
+    const left = 10 + ((d.longitude - bounds.minLng)/lngRange) * 80;
+    return { top: `${top}%`, left: `${left}%` };
+  }
+ 
+  const active = donations.find(d => d.id === activeId);
+ 
+  return (
+    <div className="map-frame" style={{ height }}>
+      <div className="fallback-map" onClick={() => setActiveId(null)}>
+        <RoadBackground />
+        {donations.map(d => {
+          const pos = toPosition(d);
+          const meta = STATUS_META[d.status];
+          return (
+            <div key={d.id} className="map-marker" style={pos}
+                 onClick={(e) => { e.stopPropagation(); setActiveId(d.id === activeId ? null : d.id); }}>
+              <div className={`marker-pin ${meta.markerClass}`}><span>{meta.emoji}</span></div>
+            </div>
+          );
+        })}
+        {active && (
+          <div className="map-popup" style={toPosition(active)} onClick={(e) => e.stopPropagation()}>
+            <MapPopupContent donation={active} onView={onView} />
+          </div>
+        )}
+      </div>
+      <div className="map-legend">
+        {Object.values(STATUS_META).map(m => (
+          <span key={m.label}><span className="legend-dot" style={{ background:m.hex }} />{m.label}</span>
+        ))}
+      </div>
+      <div className="map-config-note">
+        This is a custom fallback map — no Google Maps API key detected in this demo.
+        In the full source project, add <code>VITE_GOOGLE_MAPS_API_KEY</code> to a{" "}
+        <code>.env</code> file and <code>MapView.jsx</code> automatically switches to a real Google Map.
+      </div>
+    </div>
+  );
+}
+ 
+/* ============================================================
+   NAVBAR + FOOTER  (src/components/Navbar.jsx, Footer.jsx)
+============================================================ */
+const NAV_LINKS = [
+  { to: "home", label: "Home" },
+  { to: "map", label: "Live Map" },
+  { to: "available", label: "Available Food" },
+  { to: "impact", label: "Impact" },
+  { to: "profile", label: "Profile" },
+];
+ 
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { go } = useRoute();
+ 
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 12); }
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+ 
+  return (
+    <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      <div className="container nav-inner">
+        <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); go("home"); }}>🌿 RescueSupply</a>
+        <nav className="nav-links">
+          {NAV_LINKS.map(l => <NavLink key={l.to} to={l.to} className="nav-link">{l.label}</NavLink>)}
+        </nav>
+        <div className="nav-actions">
+          <Button size="sm" onClick={() => go("donate")}>Donate Food</Button>
+          <button className="hamburger" aria-label="Toggle menu" onClick={() => setMenuOpen(v => !v)}>{menuOpen ? "✕" : "☰"}</button>
+        </div>
+      </div>
+      {menuOpen && (
+        <div className="mobile-menu">
+          {NAV_LINKS.map(l => (
+            <a key={l.to} href="#" onClick={(e) => { e.preventDefault(); go(l.to); setMenuOpen(false); }}>{l.label}</a>
+          ))}
+          <a href="#" onClick={(e) => { e.preventDefault(); go("donate"); setMenuOpen(false); }}>Donate Food</a>
+        </div>
+      )}
+    </header>
+  );
+}
+ 
+function Footer() {
+  const { go } = useRoute();
+  const link = (to, label) => <a href="#" onClick={(e) => { e.preventDefault(); go(to); }}>{label}</a>;
+  return (
+    <footer className="footer">
+      <div className="container footer-grid">
+        <div>
+          <div className="footer-logo">🌿 RescueSupply</div>
+          <p className="footer-tag">Good food should never go to waste.</p>
+        </div>
+        <div className="footer-col">
+          <div className="footer-col-title">Quick Links</div>
+          {link("home","Home")}{link("map","Live Map")}{link("donate","Donate Food")}{link("available","Available Food")}{link("impact","Impact")}
+        </div>
+        <div className="footer-col">
+          <div className="footer-col-title">Community</div>
+          {link("donate","For Restaurants")}{link("available","For NGOs")}{link("myrescues","For Volunteers")}
+        </div>
+      </div>
+      <div className="container footer-bottom">© 2026 RescueSupply</div>
+    </footer>
+  );
+}
+ 
+/* ============================================================
+   PAGES  (src/pages/*)
+============================================================ */
+function HeroRoute() {
+  return (
+    <svg className="route-svg" viewBox="0 0 480 420" fill="none">
+      <path d="M60 340 C 140 260, 160 160, 240 120 S 380 100, 420 60" stroke="#2fa870" strokeOpacity="0.55" strokeWidth="3" strokeDasharray="2 10" strokeLinecap="round" />
+      <circle cx="60" cy="340" r="26" fill="#ddf3e3" /><text x="60" y="348" fontSize="22" textAnchor="middle">🍱</text>
+      <circle cx="240" cy="120" r="26" fill="#ddf3e3" /><text x="240" y="128" fontSize="22" textAnchor="middle">📍</text>
+      <circle cx="420" cy="60" r="26" fill="#ff9f43" /><text x="420" y="68" fontSize="22" textAnchor="middle">❤️</text>
+    </svg>
+  );
+}
+ 
+function Hero() {
+  const { go } = useRoute();
+  return (
+    <section className="hero">
+      <div className="container hero-grid">
+        <div>
+          <h1 className="hero-title">Good Food Should <span className="accent">Never Go to Waste.</span></h1>
+          <p className="hero-sub">RescueSupply connects restaurants with NGOs and communities to rescue surplus food and turn it into meals for people who need them.</p>
+          <div className="hero-actions">
+            <Button onClick={() => go("donate")}>Donate Surplus Food</Button>
+            <Button variant="outline" onClick={() => go("available")}>Explore Nearby Food</Button>
+          </div>
+        </div>
+        <div className="hero-visual">
+          <HeroRoute />
+          <div className="floating-card fc-top"><div className="fc-icon">🍱</div><div><div className="fc-title">40 Meals Rescued</div><div className="fc-sub">Today</div></div></div>
+          <div className="floating-card fc-bottom"><div className="fc-icon">📍</div><div><div className="fc-title">1.8 km Away</div><div className="fc-sub">Available for Pickup</div></div></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+ 
+const STEPS = [
+  { num:"01", icon:"🍱", title:"Restaurant", text:"Restaurant posts surplus food that's still safe to eat." },
+  { num:"02", icon:"📍", title:"Location", text:"The donation becomes visible on the live rescue map." },
+  { num:"03", icon:"🚚", title:"Rescue", text:"A nearby NGO or volunteer accepts it and arranges pickup." },
+  { num:"04", icon:"❤️", title:"Community", text:"The food reaches people who need it most." },
+];
+ 
+function FlowDiagram() {
+  const rows = [{icon:"🏬",label:"Restaurants"},{icon:"🍱",label:"Food Rescued"},{icon:"🤝",label:"NGOs & Volunteers"},{icon:"👨‍👩‍👧",label:"People Served"}];
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:4 }}>
+      {rows.map((r,i) => (
+        <React.Fragment key={r.label}>
+          <div style={{ display:"flex", alignItems:"center", gap:14, background:"rgba(255,255,255,0.06)", borderRadius:14, padding:"16px 20px" }}>
+            <span style={{ fontSize:22 }}>{r.icon}</span><span style={{ fontWeight:700 }}>{r.label}</span>
+          </div>
+          {i < rows.length-1 && <div style={{ textAlign:"center", color:"#5f8271", fontSize:18 }}>↓</div>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+ 
+function CommunityImpact() {
+  return (
+    <section className="section" style={{ background:"var(--forest)", color:"#fff" }}>
+      <div className="container">
+        <span className="eyebrow" style={{ background:"rgba(255,255,255,0.12)", color:"#cfe0d5" }}>Community impact</span>
+        <h2 className="section-heading" style={{ color:"#fff", marginTop:14, maxWidth:560 }}>Together, our community is turning surplus into support.</h2>
+        <div className="two-col" style={{ marginTop:44, alignItems:"start" }}>
+          <FlowDiagram />
+          <div>
+            <h3 style={{ color:"#fff", fontSize:18, marginBottom:16 }}>Top contributors this month</h3>
+            <div className="leaderboard">
+              {leaderboardData.map((r,i) => <RestaurantCard key={r.name} name={r.name} meals={r.meals} rank={i} />)}
+            </div>
+            <p style={{ fontSize:12.5, color:"#9db6a6", marginTop:14 }}>Demo data shown for this prototype.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+ 
+function HomePage() {
+  const { donations } = useDonations();
+  const { go } = useRoute();
+  const mapPreview = donations.slice(0,5);
+  return (
+    <div>
+      <Hero />
+      <section className="section-tight">
+        <div className="container">
+          <div className="stat-grid">
+            <ImpactCard icon="🍱" value={impactStats.mealsRescued} suffix="+" label="Meals Rescued" />
+            <ImpactCard icon="🏬" value={impactStats.restaurants} label="Restaurants Connected" />
+            <ImpactCard icon="🤝" value={impactStats.ngos} label="NGOs" />
+            <ImpactCard icon="♻️" value={impactStats.foodSavedTons} suffix=" Tons" label="Food Saved" />
+          </div>
+          <p className="demo-note">Sample statistics shown for this prototype.</p>
+        </div>
+      </section>
+      <section className="section" id="how-it-works">
+        <div className="container">
+          <span className="eyebrow">How it works</span>
+          <h2 className="section-heading" style={{ marginTop:14 }}>From surplus plate to shared meal, in four steps.</h2>
+          <div className="steps-rail">
+            {STEPS.map(s => (
+              <div className="step-item" key={s.num}>
+                <div className="step-num">{s.icon}</div>
+                <div className="step-title">Step {s.num} — {s.title}</div>
+                <div className="step-text">{s.text}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container">
+          <div className="two-col">
+            <div>
+              <span className="eyebrow">Live rescue map</span>
+              <h2 className="section-heading" style={{ marginTop:14 }}>Every donation is location-aware.</h2>
+              <p className="section-sub">As soon as a restaurant posts surplus food, it appears on the map for nearby NGOs and volunteers to discover and rescue.</p>
+              <div style={{ marginTop:24 }}><Button onClick={() => go("map")}>Open Live Map</Button></div>
+            </div>
+            <MapView donations={mapPreview} height={380} onView={(id) => go("details", id)} />
+          </div>
+        </div>
+      </section>
+      <CommunityImpact />
+    </div>
+  );
+}
+ 
+function MapPage() {
+  const { donations } = useDonations();
+  const { go } = useRoute();
+  const [filter, setFilter] = useState("All");
+  const filtered = filter === "All" ? donations : donations.filter(d => d.status === filter);
+  const FILTERS = ["All", STATUS.AVAILABLE, STATUS.PENDING, STATUS.PICKED_UP, STATUS.RESCUED];
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">Live rescue map</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>Every active donation, in real time.</h1>
+        <p className="section-sub">Click any marker to see donation details, distance and pickup window.</p>
+      </div>
+      <div className="filter-bar">
+        {FILTERS.map(f => <button key={f} className={`filter-chip ${filter===f?"active":""}`} onClick={() => setFilter(f)}>{f}</button>)}
+      </div>
+      <MapView donations={filtered} height={540} onView={(id) => go("details", id)} />
+    </div>
+  );
+}
+ 
+function DonateFoodPage() {
+  const { addDonation } = useDonations();
+  const { go } = useRoute();
+  const EMPTY = { restaurant:"", category:"Meals", food:"", description:"", meals:"", address:"", availableUntil:"", condition:"", contact:"" };
+  const [form, setForm] = useState(EMPTY);
+  const [submitted, setSubmitted] = useState(false);
+ 
+  function handleChange(e) { const { name, value } = e.target; setForm(prev => ({ ...prev, [name]: value })); }
+ 
+  function handleSubmit(e) {
+    e.preventDefault();
+    addDonation({
+      restaurant: form.restaurant, category: form.category, food: form.food, description: form.description,
+      meals: Number(form.meals) || 0, address: form.address, availableUntil: form.availableUntil,
+      condition: form.condition, contact: form.contact,
+      latitude: 30.35 + (Math.random()-0.5)*0.03, longitude: 76.82 + (Math.random()-0.5)*0.03,
+    });
+    setSubmitted(true); setForm(EMPTY);
+    setTimeout(() => go("available"), 1400);
+  }
+ 
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">For restaurants</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>Post your surplus food</h1>
+        <p className="section-sub">Takes less than a minute. Nearby NGOs and volunteers will see it instantly.</p>
+      </div>
+      <form className="card form-card fade-up" onSubmit={handleSubmit}>
+        <div className="form-grid">
+          <div className="field full"><label>Restaurant Name</label><input name="restaurant" value={form.restaurant} onChange={handleChange} placeholder="e.g. Green Leaf Restaurant" required /></div>
+          <div className="field"><label>Food Type</label><input name="food" value={form.food} onChange={handleChange} placeholder="e.g. Rice + Dal" required /></div>
+          <div className="field"><label>Food Category</label>
+            <select name="category" value={form.category} onChange={handleChange}>
+              {FOOD_CATEGORIES.filter(c => c !== "All").map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div className="field full"><label>Food Description</label><textarea name="description" value={form.description} onChange={handleChange} placeholder="Briefly describe the food, how it was prepared, and any allergens." /></div>
+          <div className="field"><label>Number of Meals</label><input type="number" min="1" name="meals" value={form.meals} onChange={handleChange} placeholder="e.g. 40" required /></div>
+          <div className="field"><label>Available Until</label><input name="availableUntil" value={form.availableUntil} onChange={handleChange} placeholder="e.g. 9:00 PM" required /></div>
+          <div className="field full"><label>Pickup Address</label><input name="address" value={form.address} onChange={handleChange} placeholder="Street, area, landmark" required /></div>
+          <div className="field"><label>Food Condition</label><input name="condition" value={form.condition} onChange={handleChange} placeholder="e.g. Freshly cooked, still hot" /></div>
+          <div className="field"><label>Contact Information</label><input name="contact" value={form.contact} onChange={handleChange} placeholder="Phone number" required /></div>
+        </div>
+        <div style={{ marginTop:28 }}><Button type="submit" block>Post Donation</Button></div>
+        {submitted && <div className="success-banner">✅ Donation posted successfully! Nearby NGOs can now discover your food donation. Redirecting to Available Food…</div>}
+      </form>
+    </div>
+  );
+}
+ 
+function AvailableFoodPage() {
+  const { donations, acceptDonation } = useDonations();
+  const { go } = useRoute();
+  const [category, setCategory] = useState("All");
+  const [status, setStatus] = useState("All");
+  const [sort, setSort] = useState("Nearest first");
+  const STATUS_FILTERS = ["All", STATUS.AVAILABLE, STATUS.PENDING, STATUS.PICKED_UP, STATUS.RESCUED];
+ 
+  const filtered = useMemo(() => {
+    let list = donations.filter(d => (category==="All"||d.category===category) && (status==="All"||d.status===status));
+    list = [...list].sort((a,b) => sort==="Nearest first" ? a.distanceKm-b.distanceKm : b.meals-a.meals);
+    return list;
+  }, [donations, category, status, sort]);
+ 
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">For NGOs & volunteers</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>Available food near you</h1>
+        <p className="section-sub">Browse live donations and accept a pickup in one tap.</p>
+      </div>
+      <div className="filter-bar" style={{ justifyContent:"space-between" }}>
+        <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
+          {FOOD_CATEGORIES.map(c => <button key={c} className={`filter-chip ${category===c?"active":""}`} onClick={() => setCategory(c)}>{c}</button>)}
+        </div>
+        <div style={{ display:"flex", gap:10 }}>
+          <select className="filter-select" value={status} onChange={(e) => setStatus(e.target.value)}>
+            {STATUS_FILTERS.map(s => <option key={s} value={s}>{s==="All"?"All Statuses":s}</option>)}
+          </select>
+          <select className="filter-select" value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option>Nearest first</option><option>Most meals first</option>
+          </select>
+        </div>
+      </div>
+      {filtered.length === 0 ? (
+        <div className="empty-state">No donations match these filters right now.</div>
+      ) : (
+        <div className="card-grid">
+          {filtered.map(d => <DonationCard key={d.id} donation={d} onAccept={acceptDonation} onView={(id) => go("details", id)} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+ 
+function DonationDetailsPage({ id }) {
+  const { donations, acceptDonation } = useDonations();
+  const { go } = useRoute();
+  const donation = donations.find(d => d.id === id);
+  if (!donation) {
+    return <div className="container empty-state">Donation not found. <a href="#" onClick={(e)=>{e.preventDefault();go("available");}}>Back to Available Food</a></div>;
+  }
+  const rows = [
+    ["Restaurant Name", donation.restaurant], ["Food Type", donation.food],
+    ["Food Description", donation.description || "—"], ["Number of Meals", donation.meals],
+    ["Pickup Location", donation.address], ["Distance", `${donation.distanceKm} km away`],
+    ["Available Until", donation.availableUntil], ["Food Condition", donation.condition || "—"],
+  ];
+  return (
+    <div className="container">
+      <div className="page-header">
+        <a href="#" className="back-link" onClick={(e) => { e.preventDefault(); go("available"); }}>← Back to Available Food</a>
+      </div>
+      <div className="card fade-up" style={{ maxWidth:640, padding:32, marginTop:16 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+          <div><h2 style={{ fontSize:24 }}>{donation.food}</h2><p style={{ color:"var(--text-muted)", marginTop:4 }}>{donation.restaurant}</p></div>
+          <StatusBadge status={donation.status} />
+        </div>
+        <div style={{ marginTop:24, display:"flex", flexDirection:"column", gap:14 }}>
+          {rows.map(([label,value]) => (
+            <div key={label} style={{ display:"flex", justifyContent:"space-between", borderBottom:"1px solid var(--border)", paddingBottom:10 }}>
+              <span style={{ color:"var(--text-muted)", fontSize:13.5 }}>{label}</span>
+              <span style={{ fontWeight:600, fontSize:14, textAlign:"right", maxWidth:"60%" }}>{value}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ display:"flex", gap:12, marginTop:28 }}>
+          {donation.status === STATUS.AVAILABLE && (
+            <Button onClick={() => { acceptDonation(donation.id); go("myrescues"); }}>Accept Donation</Button>
+          )}
+          <Button variant="outline" onClick={() => go("map")}>View on Map</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+ 
+const TIMELINE_LABELS = [
+  { status: STATUS.AVAILABLE, title:"Donation Created", sub:"Restaurant posted the surplus food" },
+  { status: STATUS.PENDING, title:"Pickup Accepted", sub:"You accepted this donation for pickup" },
+  { status: STATUS.PICKED_UP, title:"Food Collected", sub:"Food has been picked up from the restaurant" },
+  { status: STATUS.RESCUED, title:"Delivered", sub:"Food delivered to the community — fully rescued" },
+];
+ 
+function MyRescuesPage() {
+  const { myRescues, advanceStatus } = useDonations();
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">My rescues</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>Your pickups &amp; rescue history</h1>
+        <p className="section-sub">Track every donation you've accepted, from pickup to delivery.</p>
+      </div>
+      {myRescues.length === 0 ? (
+        <div className="empty-state">You haven't accepted any pickups yet. Head to Available Food to get started.</div>
+      ) : (
+        <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
+          {myRescues.map(donation => {
+            const currentIndex = STATUS_FLOW.indexOf(donation.status);
+            const isFinal = donation.status === STATUS.RESCUED;
+            return (
+              <div key={donation.id} className="card fade-up" style={{ padding:26 }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:20 }}>
+                  <div><div className="donation-restaurant">🍛 {donation.restaurant}</div><div className="donation-food">{donation.food} · {donation.meals} meals</div></div>
+                  <StatusBadge status={donation.status} />
+                </div>
+                <div className="timeline">
+                  {TIMELINE_LABELS.map((step,i) => {
+                    const done = i <= currentIndex, current = i === currentIndex;
+                    return (
+                      <div className="timeline-step" key={step.status}>
+                        <div className="timeline-marker">
+                          <div className={`timeline-dot ${done?"done":""} ${current?"current":""}`}>{done?"✓":i+1}</div>
+                          {i < TIMELINE_LABELS.length-1 && <div className={`timeline-line ${i<currentIndex?"done":""}`} />}
+                        </div>
+                        <div className="timeline-content"><div className="timeline-title">{step.title}</div><div className="timeline-sub">{step.sub}</div></div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {!isFinal && <Button size="sm" onClick={() => advanceStatus(donation.id)}>Mark as "{TIMELINE_LABELS[currentIndex+1]?.title}"</Button>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+ 
+function WeeklyChart() {
+  const max = Math.max(...weeklyMeals.map(d => d.meals));
+  return (
+    <div className="chart-bars">
+      {weeklyMeals.map(d => (
+        <div className="chart-bar-col" key={d.day}>
+          <div className="chart-bar" style={{ height: `${(d.meals/max)*100}%` }} title={`${d.meals} meals`} />
+          <div className="chart-day">{d.day}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+ 
+function ImpactPage() {
+  const { donations, rescuedTotal } = useDonations();
+  const peopleServed = Math.round(rescuedTotal * 0.8);
+  const pickups = donations.filter(d => d.status !== STATUS.AVAILABLE).length;
+  const wasteKg = Math.round(rescuedTotal * 0.3);
+  const cards = [
+    { icon:"🍱", value:rescuedTotal, label:"Meals Rescued" },
+    { icon:"♻️", value:`${wasteKg} kg`, label:"Food Waste Prevented" },
+    { icon:"❤️", value:peopleServed, label:"People Served" },
+    { icon:"🚚", value:pickups, label:"Successful Pickups" },
+  ];
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">Impact dashboard</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>The difference RescueSupply is making</h1>
+        <p className="section-sub">Updates live as donations move through the rescue flow.</p>
+      </div>
+      <div className="dash-grid">
+        {cards.map(c => (
+          <div className="card dash-card fade-up" key={c.label}>
+            <div className="dash-icon">{c.icon}</div>
+            <div className="stat-number">{c.value}</div>
+            <div className="stat-label">{c.label}</div>
+          </div>
+        ))}
+      </div>
+      <div className="card chart-card">
+        <h3 style={{ fontSize:16, marginBottom:6 }}>Meals Rescued This Week</h3>
+        <p style={{ color:"var(--text-muted)", fontSize:13, marginBottom:18 }}>Demo data for this prototype.</p>
+        <WeeklyChart />
+      </div>
+    </div>
+  );
+}
+ 
+const ROLES = ["Restaurant","NGO","Volunteer"];
+const ROLE_DATA = {
+  Restaurant: { name:"Green Leaf Restaurant", avatar:"🏬", stats:[{label:"Total Donations",value:12},{label:"Meals Rescued",value:480},{label:"Active Donations",value:2}] },
+  NGO: { name:"Helping Hands NGO", avatar:"🤝", stats:[{label:"Pickups Completed",value:32},{label:"People Served",value:680},{label:"Meals Received",value:1240}] },
+  Volunteer: { name:"Community Volunteer", avatar:"🚴", stats:[{label:"Pickups Completed",value:9},{label:"Distance Covered",value:"64 km"},{label:"Meals Delivered",value:210}] },
+};
+ 
+function ProfilePage() {
+  const { role, setRole } = useDonations();
+  const data = ROLE_DATA[role];
+  return (
+    <div className="container">
+      <div className="page-header">
+        <span className="eyebrow">Profile</span>
+        <h1 className="section-heading" style={{ marginTop:14 }}>Your RescueSupply profile</h1>
+        <p className="section-sub">Demo functionality — no account or sign-in required.</p>
+      </div>
+      <div className="role-toggle" style={{ marginTop:20 }}>
+        {ROLES.map(r => <button key={r} className={role===r?"active":""} onClick={() => setRole(r)}>{r}</button>)}
+      </div>
+      <div className="profile-header">
+        <div className="profile-avatar">{data.avatar}</div>
+        <div><h2 style={{ fontSize:20 }}>{data.name}</h2><p style={{ color:"var(--text-muted)", fontSize:14 }}>{role} account · Demo profile</p></div>
+      </div>
+      <div className="dash-grid" style={{ marginTop:28 }}>
+        {data.stats.map(s => (
+          <div className="card dash-card fade-up" key={s.label}><div className="stat-number">{s.value}</div><div className="stat-label">{s.label}</div></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+ 
+/* ============================================================
+   APP  (src/App.jsx)
+============================================================ */
+function App() {
+  const [route, setRoute] = useState({ page: "home", id: null });
+  function go(page, id = null) { window.scrollTo(0,0); setRoute({ page, id }); }
+ 
+  let Page;
+  switch (route.page) {
+    case "map": Page = <MapPage />; break;
+    case "donate": Page = <DonateFoodPage />; break;
+    case "available": Page = <AvailableFoodPage />; break;
+    case "details": Page = <DonationDetailsPage id={route.id} />; break;
+    case "myrescues": Page = <MyRescuesPage />; break;
+    case "impact": Page = <ImpactPage />; break;
+    case "profile": Page = <ProfilePage />; break;
+    default: Page = <HomePage />;
+  }
+ 
+  return (
+    <RouteContext.Provider value={{ route, go }}>
+      <DonationsProvider>
+        <Navbar />
+        <main>{Page}</main>
+        <Footer />
+      </DonationsProvider>
+    </RouteContext.Provider>
+  );
+}
+ 
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
