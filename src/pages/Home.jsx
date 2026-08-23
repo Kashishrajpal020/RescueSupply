@@ -19,10 +19,10 @@ export default function Home() {
   const mapPreview = donations.slice(0, 5);
 
   return (
-    <div>
+    <div className="home-page">
       <Hero />
 
-      <section className="section-tight">
+      <section className="section-tight home-impact-band">
         <div className="container">
           <div className="stat-grid">
             <ImpactCard icon="🍱" value={impactStats.mealsRescued} suffix="+" label="Meals Rescued" />
@@ -34,10 +34,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" id="how-it-works">
+      <section className="section home-process" id="how-it-works">
         <div className="container">
           <span className="eyebrow">How it works</span>
-          <h2 className="section-heading" style={{ marginTop: 14 }}>
+          <h2 className="section-heading home-section-heading">
             From surplus plate to shared meal, in four steps.
           </h2>
 
@@ -53,19 +53,19 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section home-map-section">
         <div className="container">
           <div className="two-col">
             <div>
               <span className="eyebrow">Live rescue map</span>
-              <h2 className="section-heading" style={{ marginTop: 14 }}>
+              <h2 className="section-heading home-section-heading">
                 Every donation is location-aware.
               </h2>
               <p className="section-sub">
                 As soon as a restaurant posts surplus food, it appears on the
                 map for nearby NGOs and volunteers to discover and rescue.
               </p>
-              <div style={{ marginTop: 24 }}>
+              <div className="home-map-action">
                 <Button as={Link} to="/map">Open Live Map</Button>
               </div>
             </div>
@@ -124,7 +124,7 @@ function Hero() {
 // Simple decorative SVG illustrating Restaurant -> Rescue -> Community.
 function HeroRoute() {
   return (
-    <svg className="route-svg" viewBox="0 0 480 420" fill="none">
+    <svg className="route-svg" viewBox="0 0 480 420" fill="none" aria-hidden="true">
       <path
         d="M60 340 C 140 260, 160 160, 240 120 S 380 100, 420 60"
         stroke="#2fa870"
@@ -147,19 +147,19 @@ function HeroRoute() {
 
 function CommunityImpact() {
   return (
-    <section className="section" style={{ background: "var(--forest)", color: "#fff" }}>
+    <section className="section home-community">
       <div className="container">
-        <span className="eyebrow" style={{ background: "rgba(255,255,255,0.12)", color: "#cfe0d5" }}>
+        <span className="eyebrow home-community-eyebrow">
           Community impact
         </span>
-        <h2 className="section-heading" style={{ color: "#fff", marginTop: 14, maxWidth: 560 }}>
+        <h2 className="section-heading home-community-heading">
           Together, our community is turning surplus into support.
         </h2>
 
-        <div className="two-col" style={{ marginTop: 44, alignItems: "start" }}>
+        <div className="two-col home-community-grid">
           <FlowDiagram />
           <div>
-            <h3 style={{ color: "#fff", fontSize: 18, marginBottom: 16 }}>
+            <h3 className="home-leaderboard-heading">
               Top contributors this month
             </h3>
             <div className="leaderboard">
@@ -167,7 +167,7 @@ function CommunityImpact() {
                 <RestaurantCard key={r.name} name={r.name} meals={r.meals} rank={i} />
               ))}
             </div>
-            <p style={{ fontSize: 12.5, color: "#9db6a6", marginTop: 14 }}>
+            <p className="home-community-note">
               Demo data shown for this prototype.
             </p>
           </div>
@@ -185,24 +185,15 @@ function FlowDiagram() {
     { icon: "👨‍👩‍👧", label: "People Served" },
   ];
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <div className="home-flow">
       {rows.map((r, i) => (
         <React.Fragment key={r.label}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              background: "rgba(255,255,255,0.06)",
-              borderRadius: 14,
-              padding: "16px 20px",
-            }}
-          >
-            <span style={{ fontSize: 22 }}>{r.icon}</span>
-            <span style={{ fontWeight: 700 }}>{r.label}</span>
+          <div className="home-flow-row">
+            <span className="home-flow-icon">{r.icon}</span>
+            <span className="home-flow-label">{r.label}</span>
           </div>
           {i < rows.length - 1 && (
-            <div style={{ textAlign: "center", color: "#5f8271", fontSize: 18 }}>↓</div>
+            <div className="home-flow-arrow" aria-hidden="true">↓</div>
           )}
         </React.Fragment>
       ))}
