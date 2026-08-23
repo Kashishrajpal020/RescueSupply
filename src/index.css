@@ -1190,6 +1190,11 @@ img {
   align-items: center;
 }
 
+.home-page .hero-grid > *,
+.home-page .two-col > * {
+  min-width: 0;
+}
+
 .home-page .hero-grid > :first-child {
   max-width: 610px;
   padding: 12px 0 18px;
@@ -1703,6 +1708,24 @@ img {
   .home-page .stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .home-page .home-map-section .two-col {
+    gap: 36px;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 941px) {
+  .home-page .hero-grid {
+    gap: 36px;
+  }
+
+  .home-page .hero-title {
+    font-size: clamp(42px, 5vw, 60px);
+  }
+
+  .home-page .hero-visual {
+    min-height: 420px;
+  }
 }
 
 @media (max-width: 940px) {
@@ -1726,6 +1749,7 @@ img {
 
   .home-page .hero-sub {
     font-size: 16px;
+    line-height: 1.6;
   }
 
   .home-page .hero-actions {
@@ -1820,6 +1844,16 @@ img {
     height: 320px !important;
   }
 
+  .home-page .home-map-section .map-legend {
+    gap: 6px;
+    padding-inline: 10px !important;
+  }
+
+  .home-page .home-map-section .map-legend span {
+    padding-inline: 7px;
+    font-size: 11px;
+  }
+
   .home-page .home-community-grid {
     margin-top: 38px;
   }
@@ -1837,5 +1871,14 @@ img {
 
   .home-page .stat-cell {
     min-height: 104px;
+  }
+
+  .home-page .home-map-section .map-frame {
+    height: 290px !important;
+    border-width: 5px;
+  }
+
+  .home-page .home-map-section .map-legend {
+    flex-wrap: wrap;
   }
 }
