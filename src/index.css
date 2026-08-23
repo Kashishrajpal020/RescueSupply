@@ -1462,9 +1462,106 @@ img {
 }
 
 .home-page .home-map-section .map-frame {
+  position: relative;
   border: 8px solid #fff;
-  border-radius: 22px;
-  box-shadow: var(--shadow-lg);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(23, 34, 28, 0.14);
+  transition: transform var(--normal), box-shadow var(--normal);
+}
+
+.home-page .home-map-section .map-frame:hover {
+  box-shadow: 0 22px 50px rgba(23, 34, 28, 0.18);
+  transform: translateY(-3px);
+}
+
+.home-page .home-map-section .fallback-map {
+  min-height: 0;
+  background:
+    radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.78), transparent 12rem),
+    #eaf2ea;
+}
+
+.home-page .home-map-section .fallback-map::after {
+  content: "";
+  position: absolute;
+  inset: 12% 14% 18% 12%;
+  border: 2px dotted rgba(31, 138, 91, 0.34);
+  border-left-color: transparent;
+  border-radius: 48% 42% 52% 38%;
+  transform: rotate(-16deg);
+  pointer-events: none;
+}
+
+.home-page .home-map-section .map-marker {
+  z-index: 2;
+  filter: drop-shadow(0 7px 6px rgba(23, 34, 28, 0.14));
+}
+
+.home-page .home-map-section .map-marker::before {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid rgba(31, 138, 91, 0.28);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: home-marker-pulse 2.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.home-page .home-map-section .marker-pin {
+  width: 38px;
+  height: 38px;
+  border-width: 3px;
+  transition: transform var(--fast), box-shadow var(--fast);
+}
+
+.home-page .home-map-section .map-marker:hover .marker-pin {
+  box-shadow: 0 8px 18px rgba(23, 34, 28, 0.2);
+  transform: rotate(-45deg) scale(1.16);
+}
+
+.home-page .home-map-section .map-popup {
+  width: min(248px, calc(100vw - 64px));
+  border: 1px solid rgba(230, 226, 214, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 18px 34px rgba(23, 34, 28, 0.18);
+}
+
+.home-page .home-map-section .map-legend {
+  gap: 8px;
+  margin: 0;
+  padding: 12px 14px 14px !important;
+  border-top: 1px solid rgba(230, 226, 214, 0.8);
+  background: #fff;
+}
+
+.home-page .home-map-section .map-legend span {
+  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--cream-soft);
+  font-size: 12px;
+}
+
+.home-page .home-map-section .legend-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.home-page .home-map-section .map-config-note {
+  margin: 10px 0 0;
+  border-radius: 10px;
+  background: rgba(221, 243, 227, 0.72);
+  font-size: 12px;
+}
+
+@keyframes home-marker-pulse {
+  0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.78); }
+  70%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.28); }
 }
 
 .home-page .home-community {
