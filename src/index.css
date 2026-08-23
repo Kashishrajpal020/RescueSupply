@@ -1329,32 +1329,62 @@ img {
 }
 
 .home-page .stat-grid {
-  gap: 0;
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  gap: 14px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   box-shadow: var(--shadow-md);
 }
 
 .home-page .stat-cell {
+  position: relative;
+  overflow: hidden;
   min-height: 132px;
   padding: 28px 26px;
-  transition: background var(--normal), transform var(--normal);
+  border: 1px solid rgba(230, 226, 214, 0.9);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(23, 34, 28, 0.06);
+  transition: transform var(--normal), background var(--normal), border-color var(--normal), box-shadow var(--normal);
+}
+
+.home-page .stat-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--emerald);
+}
+
+.home-page .stat-cell:nth-child(2)::before {
+  background: #55ad79;
+}
+
+.home-page .stat-cell:nth-child(3)::before {
+  background: var(--orange);
+}
+
+.home-page .stat-cell:nth-child(4)::before {
+  background: #78bf91;
 }
 
 .home-page .stat-cell:hover {
-  position: relative;
-  z-index: 1;
   background: var(--cream-soft);
-  transform: translateY(-3px);
+  border-color: rgba(31, 138, 91, 0.28);
+  box-shadow: 0 14px 28px rgba(23, 34, 28, 0.1);
+  transform: translateY(-4px);
 }
 
 .home-page .stat-number {
-  font-size: clamp(25px, 2.8vw, 35px);
+  font-size: clamp(26px, 2.8vw, 36px);
+  font-variant-numeric: tabular-nums;
   line-height: 1.1;
+  letter-spacing: -0.035em;
 }
 
 .home-page .stat-label {
-  max-width: 150px;
+  max-width: 170px;
+  margin-top: 9px;
   line-height: 1.35;
 }
 
@@ -1559,6 +1589,12 @@ img {
   font-size: 12.5px;
 }
 
+@media (max-width: 960px) {
+  .home-page .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 940px) {
   .home-page .hero {
     padding-top: 64px;
@@ -1681,5 +1717,15 @@ img {
   .home-page .home-community {
     padding-top: 76px;
     padding-bottom: 76px;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-page .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .stat-cell {
+    min-height: 104px;
   }
 }
