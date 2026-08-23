@@ -1193,6 +1193,7 @@ img {
 .home-page .hero-grid > :first-child {
   max-width: 610px;
   padding: 12px 0 18px;
+  animation: home-hero-copy-in 520ms var(--ease) both;
 }
 
 .home-page .hero-title {
@@ -1226,6 +1227,7 @@ img {
 .home-page .hero-actions .btn {
   min-height: 50px;
   padding-inline: 22px;
+  transition: transform var(--fast), box-shadow var(--fast), background var(--fast), border-color var(--fast);
 }
 
 .home-page .hero-actions .btn-primary {
@@ -1253,6 +1255,7 @@ img {
   box-shadow: 0 24px 60px rgba(16, 37, 27, 0.2);
   transform: translateZ(0);
   transition: transform var(--normal), box-shadow var(--normal);
+  animation: home-hero-visual-in 620ms 80ms var(--ease) both;
 }
 
 .home-page .hero-visual:hover {
@@ -1322,6 +1325,16 @@ img {
 @keyframes home-route-glow {
   0%, 100% { opacity: 0.64; }
   50% { opacity: 1; }
+}
+
+@keyframes home-hero-copy-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes home-hero-visual-in {
+  from { opacity: 0; transform: translate3d(16px, 8px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 .home-page .home-impact-band {
