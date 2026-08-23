@@ -1187,10 +1187,12 @@ img {
 
 .home-page .hero-grid {
   gap: clamp(40px, 6vw, 88px);
+  align-items: center;
 }
 
 .home-page .hero-grid > :first-child {
   max-width: 610px;
+  padding: 12px 0 18px;
 }
 
 .home-page .hero-title {
@@ -1203,6 +1205,10 @@ img {
 .home-page .hero-title .accent {
   display: block;
   color: var(--emerald);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 159, 67, 0.62);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.08em;
 }
 
 .home-page .hero-sub {
@@ -1222,7 +1228,22 @@ img {
   padding-inline: 22px;
 }
 
+.home-page .hero-actions .btn-primary {
+  box-shadow: 0 10px 22px rgba(31, 138, 91, 0.24);
+}
+
+.home-page .hero-actions .btn-primary:hover,
+.home-page .hero-actions .btn-outline:hover {
+  transform: translateY(-3px);
+}
+
+.home-page .hero-actions .btn-outline {
+  border-color: rgba(16, 37, 27, 0.18);
+  background: rgba(255, 255, 255, 0.36);
+}
+
 .home-page .hero-visual {
+  isolation: isolate;
   min-height: 470px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
@@ -1230,6 +1251,13 @@ img {
     radial-gradient(circle at 84% 17%, rgba(255, 159, 67, 0.18), transparent 12rem),
     linear-gradient(145deg, #10251b 0%, #173b2a 58%, #1f5b40 100%);
   box-shadow: 0 24px 60px rgba(16, 37, 27, 0.2);
+  transform: translateZ(0);
+  transition: transform var(--normal), box-shadow var(--normal);
+}
+
+.home-page .hero-visual:hover {
+  box-shadow: 0 28px 68px rgba(16, 37, 27, 0.25);
+  transform: translateY(-4px);
 }
 
 .home-page .hero-visual::before,
@@ -1264,6 +1292,7 @@ img {
 
 .home-page .route-svg path {
   filter: drop-shadow(0 0 8px rgba(47, 168, 112, 0.28));
+  animation: home-route-glow 4s ease-in-out infinite;
 }
 
 .home-page .floating-card {
@@ -1283,6 +1312,16 @@ img {
 .home-page .floating-card.fc-bottom {
   right: 28px;
   bottom: 34px;
+}
+
+.home-page .floating-card:hover {
+  animation-play-state: paused;
+  transform: translateY(-6px) scale(1.015);
+}
+
+@keyframes home-route-glow {
+  0%, 100% { opacity: 0.64; }
+  50% { opacity: 1; }
 }
 
 .home-page .home-impact-band {
@@ -1556,6 +1595,10 @@ img {
   .home-page .hero-visual {
     min-height: 330px;
     border-radius: 22px;
+  }
+
+  .home-page .hero-visual:hover {
+    transform: none;
   }
 
   .home-page .floating-card {
